@@ -20,9 +20,9 @@ class CartManager {
         this.path,
         JSON.stringify(this.carts, null, "\t"),
       );
-      console.log("Carrito agregado correctamente!");
+      return "Carrito agregado correctamente!";
     } catch (error) {
-      console.log(error);
+      return "Error al agregar carrito"
     }
   };
   getCartById = async (id) => {
@@ -30,7 +30,7 @@ class CartManager {
       let carts = await this.sendCarts();
       return carts.find((cart) => cart.id === id).products;
     } catch (error) {
-      console.log(error);
+      return error.message;
     }
   };
   addProductToCart = async (idCart, idProd) => {
@@ -42,7 +42,7 @@ class CartManager {
       let carts = await this.sendCarts();
       let coincidenciasCart = carts.findIndex((cart) => cart.id === idCart);
       if (coincidenciasCart === -1) {
-        return Error("Not found cart");
+        throw new Error("Carrito no encontrado");
       } else {
         let coincidenciasProd = carts[coincidenciasCart].products.findIndex(
           (prod) => prod.product === idProd,
@@ -58,10 +58,10 @@ class CartManager {
           this.path,
           JSON.stringify(this.carts, null, "\t"),
         );
-        console.log("Producto agregado correctamente!");
+        return("Producto agregado correctamente al carrito!");
       }
     } catch (error) {
-      console.log(error);
+      return error.message;
     }
   };
   sendCarts = async () => {

@@ -15,15 +15,17 @@ router.get("/:cid", async (req, res) => {
 
 router.post("/", async (req, res) => {
   console.log(req.body);
-  await c1.addCart(req.body.products || []);
+  let response=await c1.addCart(req.body.products || []);
+    res.send(response);
 });
 
 router.post("/:cid/product/:pid", async (req, res) => {
   try {
-    await c1.addProductToCart(
+   let response= await c1.addProductToCart(
       parseInt(req.params.cid),
       parseInt(req.params.pid),
     );
+   res.send(response);
   } catch (error) {
     console.log(error);
   }

@@ -41,6 +41,7 @@ class ProductManager {
         this.path,
         JSON.stringify(this.products, null, "\t"),
       );
+      return "Producto agregado exitosamente!";
     } catch (error) {
       return error.message;
     }
@@ -98,29 +99,30 @@ class ProductManager {
         JSON.stringify(products, null, "\t"),
       );
 
-      return "Se ha eliminado el producto ", product.id, " exitosamente!";
+      return "Se ha eliminado el producto " + product.id + " exitosamente!";
     } catch (e) {
       return "No se ha podido eliminar el producto o el producto no existe";
-
     }
   }
 
   updateProduct = async (updateProduct) => {
-    const prods = await this.sendProducts();
-
-    let aux = prods.findIndex((prod) => prod.id === updateProduct.id);
-
-    prods[aux] = {
-      ...prods[aux],
-      ...updateProduct,
-    };
-
     try {
+      const prods = await this.sendProducts();
+
+      let aux = prods.findIndex((prod) => prod.id === updateProduct.id);
+
+      if (aux === -1) {
+        return "Producto no encontrado";
+      }
+      prods[aux] = {
+        ...prods[aux],
+        ...updateProduct,
+      };
       await fs.promises.writeFile(this.path, JSON.stringify(prods, null, "\t"));
 
-      console.log("Producto Actualizado!");
+      return("Producto Actualizado!");
     } catch (e) {
-      console.error("Error al Actualizar el producto\n", e);
+      return("Error al Actualizar el producto\n", e);
     }
   };
 }
