@@ -1,51 +1,80 @@
 import fs from "fs";
 
 class CartManager {
-    constructor() {
-        this.carts = [];
-        this.path = "./carrito.json";
-        this.id = 0;
+  constructor() {
+    this.carts = [];
+    this.path = "./src/carrito.json";
+    this.id = 0;
+  }
+  addCart = async (prods) => {
+    try {
+      let carts = await this.sendCarts();
+      this.id = carts.length === 0 ? 0 : carts[carts.length - 1].id;
+      let cart = {
+        id: ++this.id,
+        products: [...prods],
+      };
+      carts.push(cart);
+      this.carts = carts;
+      await fs.promises.writeFile(
+        this.path,
+        JSON.stringify(this.carts, null, "\t"),
+      );
+      console.log("Carrito agregado correctamente!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  getCartById = async (id) => {
+    try {
+      let carts = await this.sendCarts();
+      return carts.find((cart) => cart.id === id).products;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  addProductToCart = async (idCart, idProd) => {
+    try {
+      let prod = {
+        product: idProd,
+        quantity: 1,
+      };
+      let carts = await this.sendCarts();
+      let coincidenciasCart = carts.findIndex((cart) => cart.id === idCart);
+      if (coincidenciasCart === -1) {
+        return Error("Not found cart");
+      } else {
+        let coincidenciasProd = carts[coincidenciasCart].products.findIndex(
+          (prod) => prod.product === idProd,
+        );
 
-    }
-    addCart = async (prods) => {
-        const cart = {
-            id: ++this.id,
-            products: [...prods],
-        };
-    }
-    getCartById = (id) => {
-        return this.carts.find((cart) => cart.id === id);
-    }
-    addProductToCart = (idCart, idProd, quant) => {
-        const prod = {
-            product: id,
-            quantity: quant,
-        }
-        let coincidenciasCart = this.carts.findIndex((cart) => cart.id === idCart);
-        if (coincidenciasCart === -1) {
-            return console.error("Not found cart");
+        if (coincidenciasProd === -1) {
+          carts[coincidenciasCart].products.push(prod);
         } else {
-            let coincidenciasProd = this.carts[coincidenciasCart].findIndex((prod) => prod.id === idProd);
-
-            if (coincidenciasProd === -1) {
-                this.carts[coincidenciasCart].products.push(prod);
-            } else {
-                this.carts[coincidenciasCart].products[coincidenciasProd].quantity += quant;
-            }
-
+          carts[coincidenciasCart].products[coincidenciasProd].quantity++;
         }
-
-    };
-    sendCarts = async () => {
-        try {
-            const carts = await fs.promises.readFile(this.path, "utf-8");
-            return JSON.parse(carts);
-        }
-        catch (error) {
-            console.log(error);
-            return this.carts
-        }
-
-    };
+        this.carts = carts;
+        await fs.promises.writeFile(
+          this.path,
+          JSON.stringify(this.carts, null, "\t"),
+        );
+        console.log("Producto agregado correctamente!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  sendCarts = async () => {
+    try {
+      if (this.carts.length === 0) {
+        const carts = await fs.promises.readFile(this.path, "utf-8");
+        return JSON.parse(carts);
+      } else {
+        return this.carts;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 }
 export default CartManager;
