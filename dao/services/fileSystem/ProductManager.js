@@ -3,7 +3,7 @@ import fs from "fs";
 class ProductManager {
   constructor() {
     this.products = [];
-    this.path = "./src/productos.json";
+    this.path = "./dao/fileSystem/productos.json";
     this.id = 0;
   }
 
@@ -120,9 +120,9 @@ class ProductManager {
       };
       await fs.promises.writeFile(this.path, JSON.stringify(prods, null, "\t"));
 
-      return("Producto Actualizado!");
+      return "Producto Actualizado!";
     } catch (e) {
-      return("Error al Actualizar el producto\n", e);
+      return "Error al Actualizar el producto\n", e;
     }
   };
 }

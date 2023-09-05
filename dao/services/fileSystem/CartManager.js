@@ -3,7 +3,7 @@ import fs from "fs";
 class CartManager {
   constructor() {
     this.carts = [];
-    this.path = "./src/carrito.json";
+    this.path = "./dao/fileSystem/carrito.json";
     this.id = 0;
   }
   addCart = async (prods) => {
@@ -22,7 +22,7 @@ class CartManager {
       );
       return "Carrito agregado correctamente!";
     } catch (error) {
-      return "Error al agregar carrito"
+      return "Error al agregar carrito";
     }
   };
   getCartById = async (id) => {
@@ -58,7 +58,7 @@ class CartManager {
           this.path,
           JSON.stringify(this.carts, null, "\t"),
         );
-        return("Producto agregado correctamente al carrito!");
+        return "Producto agregado correctamente al carrito!";
       }
     } catch (error) {
       return error.message;
