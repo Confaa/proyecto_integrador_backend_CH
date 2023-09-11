@@ -7,14 +7,50 @@ const router = Router();
 const ProductService = new ProductDBService();
 router.get("/", async (req, res) => {
   try {
-    let productos = await ProductService.getAllProducts();
-    console.log(productos);
-    if (req.query.limit) {
-      productos = productos.slice(0, req.query.limit);
+    let { limit, page, category, status, sort } = req.query;
+    if (!limit) {
+      limit = 10;
     }
+    if (!page) {
+      page = 1;
+    }
+    let query = category
+      ? { category: category }
+      : status
+      ? { status: status }
+      : {};
+
+    let response = await ProductService.getProductsWithParams(
+      limit,
+      page,
+      query,
+      sort,
+    );
+    req.products = response;
+
     res.status(200).send({
       status: "success",
-      payload: productos,
+      payload: response.docs,
+      totalPages: response.totalPages,
+      prevPage: response.prevPage,
+      nextPage: response.nextPage,
+      page: response.page,
+      hasPrevPage: response.hasPrevPage,
+      hasNextPage: response.hasNextPage,
+      prevLink: response.hasPrevPage
+        ? `http://localhost:8080/api/products?limit=${limit}&page=${
+            response.prevPage
+          }${query.category ? `&category=${query.category}` : ""}${
+            query.status ? `&status=${query.status}` : ""
+          }${sort ? `&sort=${sort}` : ""}`
+        : null,
+      nextLink: response.hasNextPage
+        ? `http://localhost:8080/api/products?limit=${limit}&page=${
+            response.nextPage
+          }${query.category ? `&category=${query.category}` : ""}${
+            query.status ? `&status=${query.status}` : ""
+          }${sort ? `&sort=${sort}` : ""}`
+        : null,
     });
   } catch (error) {
     console.log(error);

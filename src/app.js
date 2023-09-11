@@ -7,6 +7,8 @@ import __dirname from "./utils.js";
 import messageRouter, { MessageService } from "./routes/message.router.js";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
+import productsViewRouter from "./routes/productsView.router.js";
+import cartsViewRouter from "./routes/cartsView.router.js";
 
 const app = express();
 dotenv.config();
@@ -21,9 +23,10 @@ app.use(express.static(__dirname + "/public"));
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
-
+app.use("/products", productsViewRouter);
+app.use("/carts", cartsViewRouter);
 try {
-  const db = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@ecommerce.cs4ybcd.mongodb.net/?retryWrites=true&w=majority`;
+  const db = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB}`;
   await mongoose.connect(db);
   console.log("Database connected");
 } catch (error) {

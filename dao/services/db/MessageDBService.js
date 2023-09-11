@@ -9,7 +9,7 @@ class MessageDBService {
       });
       return response;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error("Error al enviar el mensaje");
     }
   }
   async getMessages() {
@@ -17,7 +17,7 @@ class MessageDBService {
       let response = await messageModel.find();
       return response;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error("Error al obtener los mensajes");
     }
   }
 }

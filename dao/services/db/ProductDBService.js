@@ -29,7 +29,7 @@ class ProductDBService {
       }
       return await productModel.create(product);
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error("Error al crear el producto");
     }
   }
   async getAllProducts() {
@@ -37,7 +37,7 @@ class ProductDBService {
       const products = await productModel.find();
       return products;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error("Error al obtener los productos");
     }
   }
 
@@ -46,7 +46,7 @@ class ProductDBService {
       let product = await productModel.findById({ _id: id });
       return product;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error("Error al obtener el producto");
     }
   }
 
@@ -55,7 +55,7 @@ class ProductDBService {
       let result = await productModel.deleteOne({ _id: id });
       return result;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error("Error al eliminar el producto");
     }
   }
   async updateProductById(id, product) {
@@ -75,7 +75,26 @@ class ProductDBService {
         },
       );
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error("Error al actualizar el producto");
+    }
+  }
+
+  async getProductsWithParams(limit, page, filter, sort) {
+    try {
+      if (!sort) {
+        return await productModel.paginate(filter, {
+          limit: limit,
+          page: page,
+        });
+      } else {
+        return await productModel.paginate(filter, {
+          limit: limit,
+          page: page,
+          sort: { price: sort },
+        });
+      }
+    } catch (error) {
+      throw new Error("Error al obtener los productos");
     }
   }
 }
