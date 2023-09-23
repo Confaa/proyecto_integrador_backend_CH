@@ -1,13 +1,9 @@
 import userModel from "../../models/user.model.js";
-import {
-  createHash,
-  isValidPassword,
-} from "../../../src/utils/functionsUtil.js";
+import { createHash, isValidPassword } from "../../../utils/functionsUtil.js";
 
 class UserDBService {
   async createUser(user) {
     try {
-      user.password = createHash(user.password);
       return await userModel.create(user);
     } catch (error) {
       throw new Error(error.message.replace(/"/g, "'"));
@@ -27,6 +23,29 @@ class UserDBService {
       throw new Error("Login failed");
     } catch (error) {
       throw new Error(error.message.replace(/"/g, "'"));
+    }
+  }
+
+  async findUserByEmail(param) {
+    try {
+      return await userModel.findOne({ email: param });
+    } catch (error) {
+      throw new Error("Error al buscar usuario");
+    }
+  }
+  async findUserById(id) {
+    try {
+      return await userModel.findById(id);
+    } catch (error) {
+      throw new Error("Error al buscar usuario");
+    }
+  }
+
+  async findUserByUsername(username) {
+    try {
+        return await userModel.findOne({ username: username });
+    }catch (error) {
+        throw new Error("Error al buscar usuario");
     }
   }
 }

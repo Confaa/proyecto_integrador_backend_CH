@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 const userCollection = "users";
 
 const userSchema = mongoose.Schema({
+  username: {
+    type: String,
+  },
   first_name: {
     type: String,
     minLength: 3,
@@ -26,7 +29,6 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    minLength: 4,
     require: true,
   },
 });
