@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const cartCollection = "carts";
 
+// Schema de los items del carrito
 const itemCartSchema = new mongoose.Schema({
   product: {
     type: Schema.Types.ObjectId,
@@ -14,6 +15,7 @@ const itemCartSchema = new mongoose.Schema({
   },
 });
 
+// Schema del carrito
 const cartSchema = new mongoose.Schema({
   products: {
     type: [itemCartSchema],
@@ -21,6 +23,7 @@ const cartSchema = new mongoose.Schema({
   },
 });
 
+// Populate de los productos del carrito
 cartSchema.pre("findOne", function () {
   this.populate("products.product");
 });

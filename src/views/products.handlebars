@@ -1,7 +1,7 @@
 <div class="products">
   <div class="data-user">
     {{#if user}}
-      <h1>Bienvenido {{user.first_name}} {{user.last_name}}</h1>
+      <h1>Bienvenido {{user.full_name}}</h1>
       <p>Email: {{user.email}}</p>
       <p>Edad: {{user.age}}</p>
       <a href="/api/sessions/logout">Cerrar sesion</a>

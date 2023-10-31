@@ -1,8 +1,13 @@
 import { Router } from "express";
 import axios from "axios";
 
+/*
+ * Manejo de las rutas de la API de views de carritos
+ * */
+
 const router = Router();
 
+// Pide todos los carritos a la base de datos
 router.get("/:cid", async (req, res) => {
   let cid = req.params.cid;
   try {
