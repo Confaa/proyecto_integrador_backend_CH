@@ -1,5 +1,7 @@
 const addCartButtons = document.querySelectorAll(".product__addCart");
-
+document
+  .getElementById("cart-id")
+  .setAttribute("href", `/carts/${sessionStorage.getItem("cartId")}`);
 addCartButtons.forEach((button) => {
   button.addEventListener("click", async (e) => {
     e.preventDefault();
@@ -28,10 +30,10 @@ addCartButtons.forEach((button) => {
           }),
         });
         cartId = await cartId.json();
-        console.log(cartId)
+        console.log(cartId);
         sessionStorage.setItem("cartId", cartId.payload._id);
       } else {
-          console.log('entre')
+        console.log("entre");
 
         let response = await fetch(
           `/api/carts/${sessionStorage.getItem(
@@ -47,7 +49,7 @@ addCartButtons.forEach((button) => {
             }),
           },
         );
-          console.log(response.status)
+        console.log(response.status);
       }
     } catch (error) {
       console.error(error);

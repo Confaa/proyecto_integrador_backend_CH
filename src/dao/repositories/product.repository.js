@@ -9,9 +9,9 @@ export default class ProductRepository {
     const newProduct = new ProductDTO(product);
     return await this.dao.add(newProduct);
   };
-    getProducts = async () => {
-        return await this.dao.get();
-    };
+  getProducts = async () => {
+    return await this.dao.get();
+  };
   getProductById = async (id) => {
     return await this.dao.getById(id);
   };

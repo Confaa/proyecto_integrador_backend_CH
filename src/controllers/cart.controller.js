@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import {
   cartService,
   productService,
-  ticketService
+  ticketService,
+  userService,
 } from "../dao/repositories/index.js";
 
 export const getCarts = async (req, res) => {
@@ -51,6 +52,10 @@ export const getCartById = async (req, res) => {
 export const addCart = async (req, res) => {
   try {
     let response = await cartService.addCart(req.body);
+    let resp = await userService.addCartToUser(
+      req.user.email,
+      response.toObject()._id,
+    );
     res.status(200).send({
       status: "success",
       payload: response,
@@ -73,7 +78,11 @@ export const addProductToCart = async (req, res) => {
       mongoose.Types.ObjectId.isValid(pid) &&
       mongoose.Types.ObjectId.isValid(cid)
     ) {
-      let response = await cartService.addProductToCart(cid, pid, req.body.quantity);
+      let response = await cartService.addProductToCart(
+        cid,
+        pid,
+        req.body.quantity,
+      );
       res.status(200).send({
         status: "success",
         payload: response,
@@ -162,18 +171,20 @@ export const emptyCart = async (req, res) => {
 
 export const purchaseCart = async (req, res) => {
   try {
-    let cart=req.cart;
-    let cartInStock=cart;
+    let cart = req.cart;
+    let cartInStock = cart;
     cart.products.forEach((element) => {
-      if(element.product.stock<element.quantity){
+      if (element.product.stock < element.quantity) {
         console.log(`no hay stock del producto ${element.product.title}`);
-        cartInStock.products.filter((product)=>product._id!==element._id)
-      }else {
-        productService.updateProductById(element._id,{...element,stock:element.product.stock-element.quantity})
-        cartService.deleteProductFromCart(cart._id,element._id)
+        cartInStock.products.filter((product) => product._id !== element._id);
+      } else {
+        productService.updateProductById(element._id, {
+          ...element,
+          stock: element.product.stock - element.quantity,
+        });
+        cartService.deleteProductFromCart(cart._id, element._id);
       }
-
-    })
+    });
     await ticketService.addTicket(cartInStock, req.user.email);
   } catch (error) {
     console.log(error);

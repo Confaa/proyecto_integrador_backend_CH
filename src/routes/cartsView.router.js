@@ -1,5 +1,5 @@
 import { Router } from "express";
-import axios from "axios";
+import { cartService } from "../dao/repositories/index.js";
 
 /*
  * Manejo de las rutas de la API de views de carritos
@@ -11,12 +11,14 @@ const router = Router();
 router.get("/:cid", async (req, res) => {
   let cid = req.params.cid;
   try {
-    let response = await axios.get(`http://localhost:8080/api/carts/${cid}`);
-    console.log(response.data.payload.products);
+    let response = await cartService.getCartById(cid);
     res.render("carts", {
       style: "styles.css",
       title: "Carrito",
-      products: response.data.payload.products,
+      products: response.toObject().products,
+      total: response.toObject().products.reduce((acc, curr) => {
+        return acc + curr.product.price * curr.quantity;
+      }, 0),
     });
   } catch (error) {
     console.log(error);

@@ -1,11 +1,10 @@
-import {ticketModel} from "../models/ticket.model.js";
+import { ticketModel } from "../models/ticket.model.js";
 import TicketDTO from "../../dto/ticket.dto.js";
 
 class Ticket {
-    add = async (cart,purchaser) => {
+  add = async (cart, purchaser) => {
     try {
-
-      return await ticketModel.create(new TicketDTO(cart,purchaser));
+      return await ticketModel.create(new TicketDTO(cart, purchaser));
     } catch (error) {
       console.log(error);
       return null;

@@ -18,6 +18,14 @@ class User {
       return null;
     }
   };
+  addCart = async (email, id) => {
+    try {
+      return await userModel.updateOne({ email }, { $set: { cart: id } });
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
 }
 
 export default User;

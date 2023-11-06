@@ -2,7 +2,7 @@ import User from "../dao/mongo/classes/user.dao.js";
 import { userModel } from "../dao/mongo/models/user.model.js";
 import { compareHash } from "../util/cryptoUtil.js";
 import jwt from "jsonwebtoken";
-import { userService } from "../dao/repositories/index.js";
+import { cartService, userService } from "../dao/repositories/index.js";
 
 export const registerUser = async (req, res) => {
   try {

@@ -1,10 +1,10 @@
 export default class TicketRepository {
-    constructor(dao) {
+  constructor(dao) {
     this.dao = dao;
   }
 
-  addTicket = async (cart,purchaser) => {
-    return await this.dao.add(cart,purchaser);
+  addTicket = async (cart, purchaser) => {
+    return await this.dao.add(cart, purchaser);
   };
   getTickets = async () => {
     return await this.dao.get();

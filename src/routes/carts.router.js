@@ -11,7 +11,8 @@ import {
   updateProductFromCart,
 } from "../controllers/cart.controller.js";
 import { isUser } from "../middlewares/authorization.js";
-import {upCart} from "../middlewares/upCart.middleware.js";
+import { upCart } from "../middlewares/upCart.middleware.js";
+import { passportCall } from "../util/authUtil.js";
 
 /*
  * Manejo de las rutas de la API de carritos
@@ -24,7 +25,7 @@ router.get("/", getCarts);
 router.get("/:cid", getCartById);
 
 // Crea un carrito en la base de datos
-router.post("/", addCart);
+router.post("/", passportCall("jwt"), addCart);
 
 // Agrega un producto al carrito
 router.post("/:cid/products/:pid", addProductToCart);
@@ -40,5 +41,5 @@ router.put("/:cid/products/:pid", isUser, updateProductFromCart);
 // Elimina un carrito por id de la base de datos
 router.delete("/:cid", emptyCart);
 
-router.post("/:cid/purchase",upCart, purchaseCart);
+router.post("/:cid/purchase", upCart, purchaseCart);
 export default router;

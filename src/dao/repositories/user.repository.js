@@ -10,4 +10,8 @@ export default class UserRepository {
   async registerUser(user) {
     return await this.dao.register(user);
   }
+
+  async addCartToUser(email, id) {
+    return await this.dao.addCart(email, id);
+  }
 }

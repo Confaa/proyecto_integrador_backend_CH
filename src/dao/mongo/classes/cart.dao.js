@@ -41,7 +41,6 @@ class Cart {
         products: { $elemMatch: { product: idProd } },
       });
       if (exist) {
-
         return await this.updateFromCart(idCart, idProd, quantity);
       } else {
         return await cartModel.updateOne(
