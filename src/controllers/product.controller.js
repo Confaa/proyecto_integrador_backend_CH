@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import ProductDTO from "../dao/dto/product.dto.js";
 import { productService } from "../dao/repositories/index.js";
+import CustomError from "../errors/CustomError.js";
+import ErrorCodes from "../errors/enums.js";
+import { generateProductIdErrorInfo } from "../errors/info.js";
 
 export const getProducts = async (req, res) => {
   try {
@@ -68,7 +71,12 @@ export const getProductById = async (req, res) => {
         payload: producto,
       });
     } else {
-      throw new Error("Id invalido");
+      CustomError.createError({
+        name: "Invalid ID",
+        cause: generateProductIdErrorInfo(pid),
+        message: "Invalid ID",
+        code: ErrorCodes.INVALID_PARAM,
+      });
     }
   } catch (error) {
     console.log(error);
@@ -107,7 +115,12 @@ export const updateProductById = async (req, res) => {
         payload: response,
       });
     } else {
-      throw new Error("Id invalido");
+      CustomError.createError({
+        name: "Invalid ID",
+        cause: generateProductIdErrorInfo(pid),
+        message: "Invalid ID",
+        code: ErrorCodes.INVALID_PARAM,
+      });
     }
   } catch (error) {
     res.status(400).send({
@@ -128,7 +141,12 @@ export const deleteProductById = async (req, res) => {
         payload: response,
       });
     } else {
-      throw new Error("Id invalido");
+      CustomError.createError({
+        name: "Invalid ID",
+        cause: generateProductIdErrorInfo(pid),
+        message: "Invalid ID",
+        code: ErrorCodes.INVALID_PARAM,
+      });
     }
   } catch (error) {
     console.log(error);

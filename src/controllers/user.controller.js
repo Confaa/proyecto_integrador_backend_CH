@@ -1,11 +1,27 @@
-import User from "../dao/mongo/classes/user.dao.js";
-import { userModel } from "../dao/mongo/models/user.model.js";
 import { compareHash } from "../util/cryptoUtil.js";
 import jwt from "jsonwebtoken";
-import { cartService, userService } from "../dao/repositories/index.js";
+import { userService } from "../dao/repositories/index.js";
+import { generateUserErrorInfo } from "../errors/info.js";
+import CustomError from "../errors/CustomError.js";
+import ErrorCodes from "../errors/enums.js";
 
 export const registerUser = async (req, res) => {
   try {
+    let { first_name, last_name, email, password, age } = req.body;
+    if (!first_name || !last_name || !email || !password || !age) {
+      CustomError.createError({
+        name: "User creation error",
+        cause: generateUserErrorInfo({
+          first_name,
+          last_name,
+          email,
+          password,
+          age,
+        }),
+        message: "Error trying to create User",
+        code: ErrorCodes.INVALID_TYPES_ERROR,
+      });
+    }
     const result = await userService.registerUser(req.body);
     res.status(200).send({
       status: "User created successfully",

@@ -12,7 +12,8 @@ import cartsViewRouter from "./routes/cartsView.router.js";
 import userViewRouter from "./routes/userView.router.js";
 import sessionRouter from "./routes/session.router.js";
 import userRouter from "./routes/user.router.js";
-
+import mockingRouter from "./routes/mocking.router.js";
+import errorHandler from "./middlewares/errors/index.js";
 const app = express();
 dotenv.config();
 
@@ -36,12 +37,14 @@ try {
 }
 // Routers
 app.use("/", userViewRouter);
+app.use("/", mockingRouter);
 app.use("/api/sessions", userRouter);
 app.use("/api/sessions", sessionRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/products", productsViewRouter);
 app.use("/carts", cartsViewRouter);
+app.use(errorHandler);
 const port = 8080;
 
 app.listen(port, () => {

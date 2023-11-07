@@ -5,6 +5,12 @@ import {
   ticketService,
   userService,
 } from "../dao/repositories/index.js";
+import CustomError from "../errors/CustomError.js";
+import ErrorCodes from "../errors/enums.js";
+import {
+  generateCartIdErrorInfo,
+  generateCartNotFoundErrorInfo
+} from "../errors/info.js";
 
 export const getCarts = async (req, res) => {
   try {
@@ -30,15 +36,25 @@ export const getCartById = async (req, res) => {
     if (mongoose.Types.ObjectId.isValid(cid)) {
       let cart = await cartService.getCartById(cid);
       if (!cart) {
-        throw new Error("No se encontro el carrito");
+        CustomError.createError({
+          name: "Cart not found",
+          cause: generateCartNotFoundErrorInfo(cid),
+          message: "Error to get cart by ID",
+          code: ErrorCodes.NOT_FOUND_ERROR,
+        });
       }
       res.status(200).send({
         status: "success",
         payload: cart,
       });
     } else {
-      throw new Error("Id invalido");
-    }
+      CustomError.createError({
+        name: "Invalid Params",
+        cause: generateCartIdErrorInfo(req.params.cid),
+        message: "Error to get cart by ID",
+        code: ErrorCodes.INVALID_PARAM,
+      });
+      }
   } catch (error) {
     console.log(error);
     res.status(400).send({
@@ -52,7 +68,7 @@ export const getCartById = async (req, res) => {
 export const addCart = async (req, res) => {
   try {
     let response = await cartService.addCart(req.body);
-    let resp = await userService.addCartToUser(
+    await userService.addCartToUser(
       req.user.email,
       response.toObject()._id,
     );
@@ -88,7 +104,12 @@ export const addProductToCart = async (req, res) => {
         payload: response,
       });
     } else {
-      throw new Error("Id invalido");
+      CustomError.createError({
+        name: "Invalid Params",
+        cause: generateProductCartIdErrorInfo(cid, pid),
+        message: "Error to add product to cart",
+        code: ErrorCodes.INVALID_PARAM,
+      });
     }
   } catch (error) {
     console.log(error);
@@ -106,7 +127,13 @@ export const deleteProductFromCart = async (req, res) => {
         payload: response,
       });
     } else {
-      throw new Error("Id invalido");
+      CustomError.createError({
+        name: "Invalid Params",
+        cause: generateCartIdErrorInfo(req.params.cid),
+        message: "Error to delete product from cart",
+        code: ErrorCodes.INVALID_PARAM,
+      });
+
     }
   } catch (error) {
     console.log(error);
@@ -123,7 +150,13 @@ export const updateCart = async (req, res) => {
         payload: response,
       });
     } else {
-      throw new Error("Id invalido");
+      CustomError.createError({
+        name: "Invalid Params",
+        cause: generateCartIdErrorInfo(req.params.cid),
+        message: "Error to update cart",
+        code: ErrorCodes.INVALID_PARAM,
+      });
+
     }
   } catch (error) {
     console.log(error);
