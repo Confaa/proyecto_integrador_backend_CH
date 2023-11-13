@@ -12,7 +12,7 @@ export const authorization = () => {
 
 export const isAdmin = () => {
   return (req, res, next) => {
-    console.log(req.user);
+    req.logger.debug(req.user);
     if (req.user.role !== "admin") {
       return res.status(403).send({
         error: "Not permissions",
@@ -24,7 +24,7 @@ export const isAdmin = () => {
 
 export const isUser = () => {
   return (req, res, next) => {
-    console.log(req.user);
+    req.logger.debug(req.user);
     if (req.user.role !== "user") {
       return res.status(403).send({
         error: "Not permissions",

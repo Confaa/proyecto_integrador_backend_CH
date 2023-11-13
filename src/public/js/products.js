@@ -49,7 +49,6 @@ addCartButtons.forEach((button) => {
             }),
           },
         );
-        console.log(response.status);
       }
     } catch (error) {
       console.error(error);

@@ -9,7 +9,7 @@ import CustomError from "../errors/CustomError.js";
 import ErrorCodes from "../errors/enums.js";
 import {
   generateCartIdErrorInfo,
-  generateCartNotFoundErrorInfo
+  generateCartNotFoundErrorInfo,
 } from "../errors/info.js";
 
 export const getCarts = async (req, res) => {
@@ -54,7 +54,7 @@ export const getCartById = async (req, res) => {
         message: "Error to get cart by ID",
         code: ErrorCodes.INVALID_PARAM,
       });
-      }
+    }
   } catch (error) {
     console.log(error);
     res.status(400).send({
@@ -68,10 +68,7 @@ export const getCartById = async (req, res) => {
 export const addCart = async (req, res) => {
   try {
     let response = await cartService.addCart(req.body);
-    await userService.addCartToUser(
-      req.user.email,
-      response.toObject()._id,
-    );
+    await userService.addCartToUser(req.user.email, response.toObject()._id);
     res.status(200).send({
       status: "success",
       payload: response,
@@ -133,7 +130,6 @@ export const deleteProductFromCart = async (req, res) => {
         message: "Error to delete product from cart",
         code: ErrorCodes.INVALID_PARAM,
       });
-
     }
   } catch (error) {
     console.log(error);
@@ -156,7 +152,6 @@ export const updateCart = async (req, res) => {
         message: "Error to update cart",
         code: ErrorCodes.INVALID_PARAM,
       });
-
     }
   } catch (error) {
     console.log(error);
@@ -208,7 +203,9 @@ export const purchaseCart = async (req, res) => {
     let cartInStock = cart;
     cart.products.forEach((element) => {
       if (element.product.stock < element.quantity) {
-        console.log(`no hay stock del producto ${element.product.title}`);
+        req.logger.warning(
+          `No hay stock del producto ${element.product.title}`,
+        );
         cartInStock.products.filter((product) => product._id !== element._id);
       } else {
         productService.updateProductById(element._id, {

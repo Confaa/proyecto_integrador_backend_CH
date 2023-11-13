@@ -29,7 +29,7 @@ export const auth = (req, res, next) => {
       return res.status(403).redirect("/login?failedLogin=true");
     }
     req.user = credentiales;
-    console.log(req.user);
+    req.logger.info("Usuario autenticado");
     next();
   });
 };

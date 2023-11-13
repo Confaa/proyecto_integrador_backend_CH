@@ -14,14 +14,13 @@ export const generateProductIdErrorInfo = (id) => {
 };
 
 export const generateCartIdErrorInfo = (id) => {
-    return `The ID ${id} of cart is not valid`;
-}
+  return `The ID ${id} of cart is not valid`;
+};
 
 export const generateCartNotFoundErrorInfo = (id) => {
-    return `The cart with ID ${id} was not found`;
-}
+  return `The cart with ID ${id} was not found`;
+};
 
-export const generateProductCartIdErrorInfo = (cid,pid) => {
-    return `The ID ${cid} of cart is not valid or the ID ${pid} of product is not valid`;
-
-}
+export const generateProductCartIdErrorInfo = (cid, pid) => {
+  return `The ID ${cid} of cart is not valid or the ID ${pid} of product is not valid`;
+};
