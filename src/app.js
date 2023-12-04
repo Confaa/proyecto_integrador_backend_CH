@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import passport from "passport";
 import initPassport from "./config/passport.config.js";
 import mongoose from "mongoose";
+import swaggerUiExpress from "swagger-ui-express";
+import specs from "./config/swagger.config.js";
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
 import productsViewRouter from "./routes/productsView.router.js";
@@ -38,6 +40,9 @@ try {
 } catch (error) {
   console.log(error);
 }
+// Docs
+app.use("/api-docs",swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+
 // Routers
 app.use("/", userViewRouter);
 app.use("/", mockingRouter);

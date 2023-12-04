@@ -110,6 +110,11 @@ export const addProductToCart = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(400).send({
+      status: "error",
+      message: error.message,
+      payload: [],
+    });
   }
 };
 
@@ -133,6 +138,11 @@ export const deleteProductFromCart = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(400).send({
+      status: "error",
+      message: error.message,
+      payload: [],
+    });
   }
 };
 
@@ -155,6 +165,11 @@ export const updateCart = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(400).send({
+      status: "error",
+      message: error.message,
+      payload: [],
+    });
   }
 };
 
@@ -177,6 +192,11 @@ export const updateProductFromCart = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(400).send({
+      status: "error",
+      message: error.message,
+      payload: [],
+    });
   }
 };
 
@@ -194,6 +214,11 @@ export const emptyCart = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(400).send({
+      status: "error",
+      message: error.message,
+      payload: [],
+    });
   }
 };
 
@@ -218,5 +243,10 @@ export const purchaseCart = async (req, res) => {
     await ticketService.addTicket(cartInStock, req.user.email);
   } catch (error) {
     console.log(error);
+    res.status(400).send({
+      status: "error",
+      message: "Error to purchase cart",
+      payload: [],
+    });
   }
 };
